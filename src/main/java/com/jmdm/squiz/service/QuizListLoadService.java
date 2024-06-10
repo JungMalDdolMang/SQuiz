@@ -64,14 +64,18 @@ public class QuizListLoadService {
 //                 }
 //             }
             targetDktLists.sort(Comparator.comparing(DktList::getPredict));
-            int cnt = 0;
+
             for (DktList dkt : targetDktLists) {
-                if (cnt == 4) {
+                if (weakPart.size() == 3) {
                     break;
+                } else if (dkt.getPredict() <= 0) {
+                    weakPart.add(KC.fromId(dkt.getKcId()));
                 }
-                weakPart.add(KC.fromId(dkt.getKcId()));
-                cnt++;
             }
+
+            System.out.println("최종 개수: " + weakPart.size());
+
+            
         });
         return weakPart;
     }

@@ -26,8 +26,12 @@ public class FruitBasketController {
             description = "사용자의 모든 과일바구니를 제공하는 API입니다.")
     @ApiResponse(responseCode = "200", description = "사용자의 과일 바구니 로드 성공", content = @Content(schema = @Schema(implementation = FruitBasketsLoadResponse.class)))
     public ResponseEntity<ApiResponseEntity<FruitBasketsLoadResponse>> loadFruitBaskets(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        System.out.println("\n\n Get /api/v1/fruit-basket/load 호출 \n\n");
+        System.out.println("userDetails = " + userDetails);
         String memberId = userDetails.getUsername();
         FruitBasketsLoadResponse response = fruitBasketService.loadFruitBasket(memberId);
+        System.out.println("\n\n Get /api/v1/fruit-basket/load 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "과일 바구니 목록입니다."));
     }
 
@@ -37,8 +41,12 @@ public class FruitBasketController {
     @ApiResponse(responseCode = "200", description = "새로운 과일바구니 생성 성공", content = @Content(schema = @Schema(implementation = FruitBasketMakeResponse.class)))
     public ResponseEntity<ApiResponseEntity<FruitBasketMakeResponse>> makeFruitBasket(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                       @RequestBody FruitBasketMakeRequest request) {
+        System.out.println("\n\n Post /api/v1/fruit-basket/make 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         String memberId = userDetails.getUsername();
         FruitBasketMakeResponse response = fruitBasketService.makeFruitBasket(memberId, request);
+        System.out.println("\n\n Post /api/v1/fruit-basket/make 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "새로 만들어진 과일바구니 id"));
     }
 
@@ -49,7 +57,11 @@ public class FruitBasketController {
     public ResponseEntity<ApiResponseEntity<SpecificFruitBasketsLoadResponse>> loadSpecificFruitBaskets(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                                         @RequestBody SpecificFruitBasketLoadRequest request) {
         String memberId = userDetails.getUsername();
+        System.out.println("\n\n Post /api/v1/fruit-basket/load-specific 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         SpecificFruitBasketsLoadResponse response = fruitBasketService.loadSpecificFruitBaskets(memberId, request);
+        System.out.println("\n\n Post /api/v1/fruit-basket/load-specific 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "해당 과목의 과일바구니 목록"));
     }
 
@@ -58,8 +70,11 @@ public class FruitBasketController {
     @ApiResponse(responseCode = "200", description = "과일바구니 문제 추가 성공", content = @Content(schema = @Schema(implementation = SuccessCode.class)))
     public ResponseEntity<ApiResponseEntity<Void>> addProblem(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                               @RequestBody ProblemAddRequest request) {
+        System.out.println("\n\n Post /api/v1/fruit-basket/add-problem 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         String memberId = userDetails.getUsername();
         fruitBasketService.addProblem(memberId, request);
+        System.out.println("\n\n Post /api/v1/fruit-basket/add-problem 호출완료 \n\n");
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS));
     }
 
@@ -68,8 +83,12 @@ public class FruitBasketController {
     @ApiResponse(responseCode = "200", description = "특정 과일바구니 속 문제 로드 성공", content = @Content(schema = @Schema(implementation = ProblemsLoadResponse.class)))
     public ResponseEntity<ApiResponseEntity<ProblemsLoadResponse>> loadProblems(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                 @RequestBody ProblemsLoadRequest request) {
+        System.out.println("\n\n Post /api/v1/fruit-basket/load-problems 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         String memberId = userDetails.getUsername();
         ProblemsLoadResponse response = fruitBasketService.loadProblems(memberId, request);
+        System.out.println("\n\n Post /api/v1/fruit-basket/load-problems 호출완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "해당 과목의 과일바구니 목록"));
     }
 

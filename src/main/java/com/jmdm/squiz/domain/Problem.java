@@ -56,7 +56,7 @@ public class Problem {
         this.content = content;
         this.problemNo = problemNo;
         this.answer = answer;
-        this.blanks = blanks;
+        this.blanks = createBlanks(blanks);
         this.explanation = explanation;
     }
     private void setQuiz(Quiz quiz) {
@@ -71,6 +71,19 @@ public class Problem {
 
     public void setCorrect(int correct) {
         this.correct = correct;
+    }
+
+    // createBlanks 메서드 정의
+    private Blanks createBlanks(Blanks blanksDTO) {
+        if (blanksDTO == null) {
+            return null;
+        }
+    return Blanks.builder()
+        .blank_1("none".equals(blanksDTO.getBlank_1()) ? null : blanksDTO.getBlank_1())
+        .blank_2("none".equals(blanksDTO.getBlank_2()) ? null : blanksDTO.getBlank_2())
+        .blank_3("none".equals(blanksDTO.getBlank_3()) ? null : blanksDTO.getBlank_3())
+        .blank_4("none".equals(blanksDTO.getBlank_4()) ? null : blanksDTO.getBlank_4())
+        .build();
     }
 
 }

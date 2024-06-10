@@ -125,11 +125,13 @@ public class FruitBasketService {
                     .blanks(fruitBasketProblem.getProblem().getBlanks())
                     .checkedBlanks(fruitBasketProblem.getProblem().getCheckedBlanks())
                     .isCorrect(fruitBasketProblem.getProblem().getCorrect())
+                    .explanation(fruitBasketProblem.getProblem().getExplanation())
                     .build();
             problemList.add(dto);
             i++;
         }
         ProblemsLoadResponse response = new ProblemsLoadResponse();
+        response.setFruitBasketName(fruitBasket.getFruitBasketName());
         response.setProblemList(problemList);
         return response;
     }

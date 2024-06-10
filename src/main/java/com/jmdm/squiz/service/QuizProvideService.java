@@ -4,6 +4,7 @@ import com.jmdm.squiz.domain.Problem;
 import com.jmdm.squiz.domain.Quiz;
 import com.jmdm.squiz.dto.ProblemAnswerDTO;
 import com.jmdm.squiz.dto.QuizDetailResponse;
+import com.jmdm.squiz.enums.KC;
 import com.jmdm.squiz.exception.ErrorCode;
 import com.jmdm.squiz.exception.model.NotFoundPdfException;
 import com.jmdm.squiz.exception.model.NotFoundQuizException;
@@ -41,6 +42,8 @@ public class QuizProvideService {
                     .blanks(problem.getBlanks())
                     .checkedBlanks(problem.getCheckedBlanks())
                     .isCorrect(problem.getCorrect())
+                    .explanation(problem.getExplanation())
+                    .kcName(KC.fromId(problem.getKcId()))
                     .build();
             problemAnswerDTOS.add(problemAnswerDTO);
         }

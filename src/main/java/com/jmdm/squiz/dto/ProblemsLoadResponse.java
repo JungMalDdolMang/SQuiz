@@ -6,5 +6,6 @@ import java.util.ArrayList;
 
 @Data
 public class ProblemsLoadResponse {
-    ArrayList<ProblemAnswerDTO> problemList;
+    private String fruitBasketName;
+    private ArrayList<ProblemAnswerDTO> problemList;
 }

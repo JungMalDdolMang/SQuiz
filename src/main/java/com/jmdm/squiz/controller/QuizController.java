@@ -34,8 +34,12 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "퀴즈 생성 성공", content = @Content(schema = @Schema(implementation = QuizGenerateResponse.class)))
     public ResponseEntity<ApiResponseEntity<QuizGenerateResponse>> generateQuiz(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                 @Validated  @RequestBody QuizGenerateRequest request) throws IOException {
+        System.out.println("\n\n Post /api/v1/quiz/generate-quiz 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         String memberId = userDetails.getUsername();
         QuizGenerateResponse response = quizGenerateService.generateQuiz(memberId, request);
+        System.out.println("\n\n Post /api/v1/quiz/generate-quiz 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "퀴즈 정보입니다."));
     }
 
@@ -44,8 +48,12 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "퀴즈 채점 성공", content = @Content(schema = @Schema(implementation = QuizCheckResponse.class)))
     public ResponseEntity<ApiResponseEntity<QuizCheckResponse>> checkQuiz(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                           @RequestBody QuizCheckRequest request) throws IOException {
+        System.out.println("\n\n Post /api/v1/quiz/check-quiz 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         String memberId = userDetails.getUsername();
         QuizCheckResponse response = quizCheckService.checkQuiz(memberId, request);
+        System.out.println("\n\n Post /api/v1/quiz/check-quiz 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "퀴즈 채점 결과입니다."));
     }
 
@@ -54,8 +62,12 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "퀴즈 채점 성공", content = @Content(schema = @Schema(implementation = QuizDetailResponse.class)))
     public ResponseEntity<ApiResponseEntity<QuizDetailResponse>> getProblems(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                @RequestBody QuizDetailRequest request) {
+        System.out.println("\n\n Post /api/v1/quiz/quiz-detail 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", request = " + request);
         String memberId = userDetails.getUsername();
         QuizDetailResponse response = quizProvideService.getQuiz(memberId, request.getQuizId());
+        System.out.println("\n\n Post /api/v1/quiz/quiz-detail 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "채점된 문제들"));
     }
 
@@ -63,8 +75,12 @@ public class QuizController {
     @Operation(summary = "지난 퀴즈 목록 로드 API", description = "지난 퀴즈 목록 페이지 목록들을 불러오는 API")
     @ApiResponse(responseCode = "200", description = "지난 퀴즈목록 전송 성공", content = @Content(schema = @Schema(implementation = QuizListLoadResponse.class)))
     public ResponseEntity<ApiResponseEntity<QuizListLoadResponse>> loadQuizzs(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        System.out.println("\n\n Get /api/v1/quiz/load-quizList 호출 \n\n");
+        System.out.println("userDetails = " + userDetails);
         String memberId = userDetails.getUsername();
         QuizListLoadResponse response = quizListLoadService.loadQuizList(memberId);
+        System.out.println("\n\n Get /api/v1/quiz/load-quizList 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "요청한 퀴즈 목록들"));
     }
 
@@ -73,8 +89,12 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "퀴즈 채점 성공", content = @Content(schema = @Schema(implementation = QuizCheckResponse.class)))
     public ResponseEntity<ApiResponseEntity<QuizCheckResponse>> loadCheckedQuizResult(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                          @RequestParam("quizId") Long quizId) {
+        System.out.println("\n\n Get /api/v1/quiz/checked-quiz-result 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", quizId = " + quizId);
         String memberId = userDetails.getUsername();
         QuizCheckResponse response = pastQuizResultLoadService.loadPastQuizResult(quizId);
+        System.out.println("\n\n Get /api/v1/quiz/checked-quiz-result 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, response, "지난 퀴즈의 채점 결과"));
     }
 

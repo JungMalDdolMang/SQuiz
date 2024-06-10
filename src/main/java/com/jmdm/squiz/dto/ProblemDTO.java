@@ -17,5 +17,7 @@ public class ProblemDTO {
     @Schema(description = "빈칸이 포함된 내용 만약 빈칸이 아니라면 null",
             defaultValue = "null")
     private String content;
+    @Schema(description = "빈칸 수", defaultValue = "1")
+    private int blankNum;
 }
 

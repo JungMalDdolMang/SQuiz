@@ -86,7 +86,7 @@ public class SummaryService {
         body.put("pdfId", pdf.getId());
         body.put("pdfText", fileService.loadDataFromUrl(pdf.getFilePath()));
         body.put("subject", pdf.getSubjectType());
-        body.put("pageKcId", pdf.getPageKcId());
+        body.put("pageKcId", fileService.loadDataFromUrl(pdf.getKcDataFilePath()));
         System.out.println("body = " + body);
 
         // post 요청

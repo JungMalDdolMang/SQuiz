@@ -31,9 +31,13 @@ public class ProblemAnswerDTO {
     private CheckedBlanks checkedBlanks;
     @Schema(description = "문제가 맞으면 1, 틀리면 0")
     private int isCorrect;
+    @Schema(description = "해설", defaultValue = "해설입니둥")
+    private String explanation;
+    @Schema(description = "kc 이름", defaultValue = "운영체제 정의")
+    private String kcName;
 
     @Builder
-    public ProblemAnswerDTO(int problemNo, String question, Options options, String content, String answer, String checkedAnswer, Blanks blanks, CheckedBlanks checkedBlanks, int isCorrect, QuizType quizType) {
+    public ProblemAnswerDTO(int problemNo, String question, Options options, String content, String answer, String checkedAnswer, Blanks blanks, CheckedBlanks checkedBlanks, int isCorrect, QuizType quizType, String explanation, String kcName) {
         this.problemNo = problemNo;
         this.question = question;
         this.options = options;
@@ -44,5 +48,7 @@ public class ProblemAnswerDTO {
         this.checkedBlanks = checkedBlanks;
         this.isCorrect = isCorrect;
         this.quizType = quizType;
+        this.explanation = explanation;
+        this.kcName = kcName;
     }
 }

@@ -1,6 +1,5 @@
 package com.jmdm.squiz.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmdm.squiz.domain.Member;
 import com.jmdm.squiz.domain.Pdf;
@@ -11,6 +10,7 @@ import com.jmdm.squiz.exception.ErrorCode;
 import com.jmdm.squiz.exception.model.AiServerException;
 import com.jmdm.squiz.repository.MemberRepository;
 import com.jmdm.squiz.repository.PdfRepository;
+import com.jmdm.squiz.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,21 +19,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +40,6 @@ public class PdfUploadService {
     private final FileService fileService;
     @Value("${ai.server.url}")
     private String aiUrl;
-
-
 
     @Transactional
     public PdfUploadResponse uploadPdf(String memberId, SubjectType subjectType, MultipartFile pdf) throws IOException {
@@ -57,21 +52,24 @@ public class PdfUploadService {
         int totalPageCount = getPageCount(pdf);
         Member member = memberRepository.findByMemberId(memberId);
         String storedFileName = fileService.getStoredFileName(".txt");
+        String kcDataFileName = fileService.getStoredFileName(".txt");
         Pdf storedPdf = Pdf.builder()
                 .member(member)
                 .uploadFileName(uploadFileName)
                 .totalPageCount(totalPageCount)
                 .subjectType(subjectType)
                 .storedFileName(storedFileName)
+                .kcDataFileName(kcDataFileName)
                 .build();
         pdfRepository.save(storedPdf);
 
         // ai post pdf text 생성, kc 분류
         AiGetTextAndClassifyKcResponse response = getTextAndKCs(storedPdf.getId(), subjectType, pdf);
         String s3FilePath = fileService.saveData(response.getPdfText(), storedFileName);
-//        String s3FilePath = fileService.saveData("그냥 아무말아무말", storedFileName);
+        String kcDataFilePath = fileService.saveData(response.getPageKcId(), kcDataFileName);
+
         // PdfToText, kc 저장
-        storedPdf.setPageKcId(response.getPageKcId());
+        storedPdf.setKcDataFilePath(kcDataFilePath);
         storedPdf.setFilePath(s3FilePath);
         pdfRepository.save(storedPdf);
 
@@ -101,18 +99,24 @@ public class PdfUploadService {
         body.add("pdf", new MultipartInputStreamFileResource(pdf.getInputStream(), pdf.getOriginalFilename()));
         body.add("subject", subjectType.toString());
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = createRestTemplateWithTimeout();
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
         System.out.println("전송");
         ResponseEntity<String> response = restTemplate.postForEntity(aiServerUrl, request, String.class);
         System.out.println("전송완료");
-        if (! response.getStatusCode().is2xxSuccessful()) {
+        if (!response.getStatusCode().is2xxSuccessful()) {
             pdfRepository.deleteById(pdfId);
             throw new AiServerException(ErrorCode.AI_SERVER_ERROR, ErrorCode.AI_SERVER_ERROR.getMessage());
         }
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response.getBody(), AiGetTextAndClassifyKcResponse.class);
+    }
 
+    private RestTemplate createRestTemplateWithTimeout() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(180000);  // 연결 타임아웃 설정 (밀리초 단위, 3분)
+        factory.setReadTimeout(180000);     // 읽기 타임아웃 설정 (밀리초 단위, 3분)
+        return new RestTemplate(factory);
     }
 
     private static class MultipartInputStreamFileResource extends InputStreamResource {
@@ -133,5 +137,4 @@ public class PdfUploadService {
             return -1; // We do not know the content length beforehand
         }
     }
-
 }

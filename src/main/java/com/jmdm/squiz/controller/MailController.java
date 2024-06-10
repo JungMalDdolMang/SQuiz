@@ -36,7 +36,11 @@ public class MailController {
     @ApiResponse(responseCode = "200", description = "이메일 인증 성공", content = @Content(schema = @Schema(implementation = EmailCertificationResponse.class)))
     public ResponseEntity<ApiResponseEntity<EmailCertificationResponse>> sendCertificationNumber(@Validated @RequestBody EmailCertificationRequest request)
             throws MessagingException, NoSuchAlgorithmException {
+        System.out.println("\n\n Post /api/v1/email/send-certification 호출 \n\n");
+        System.out.println("request = " + request);
         EmailCertificationResponse response = mailSendService.sendEmailForCertification(request.getEmail());
+        System.out.println("\n\n Post /api/v1/email/send-certification 호출 완료 \n\n");
+        System.out.println("response = " + response);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.EMAIL_SEND_SUCCESS, response, "인증할 메일과 인증 코드"));
     }
 
@@ -44,7 +48,11 @@ public class MailController {
     @Operation(summary = "인증코드 확인", description = "인증코드가 올바른지 확인하는 API")
     @ApiResponse(responseCode = "200", description = "인증코드 일치")
     public ResponseEntity<ApiResponseEntity<Void>> verifyCertificationNumber(@RequestBody EmailCertificationResponse request) {
+        System.out.println("\n\n Post /api/v1/email/verify 호출 \n\n");
+        System.out.println("request = " + request);
         mailVerifyService.verifyEmail(request.getEmail(), request.getCertificationNumber());
+        System.out.println("\n\n Post /api/v1/email/verify 호출 완료 \n\n");
+        System.out.println("request = " + request);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS));
     }
 }

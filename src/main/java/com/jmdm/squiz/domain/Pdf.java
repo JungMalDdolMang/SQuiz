@@ -29,13 +29,14 @@ public class Pdf {
     private String filePath;
     private int totalPageCount;
     private SubjectType subjectType;
-    private String pageKcId;
+    private String kcDataFilePath;
+    private String kcDataFileName;
 
     @OneToMany(mappedBy = "pdf", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Quiz> quizes = new ArrayList<>();
 
     @Builder
-    public Pdf(Long id, Member member, String uploadFileName, SubjectType subjectType, String filePath, String storedFileName, int totalPageCount, String pageKcId) {
+    public Pdf(Long id, Member member, String uploadFileName, SubjectType subjectType, String filePath, String storedFileName, int totalPageCount, String kcDataFilePath, String kcDataFileName) {
         this.id = id;
         setMember(member);
         this.subjectType = subjectType;
@@ -43,7 +44,8 @@ public class Pdf {
         this.filePath = filePath;
         this.storedFileName = storedFileName;
         this.totalPageCount = totalPageCount;
-        this.pageKcId = pageKcId;
+        this.kcDataFilePath = kcDataFilePath;
+        this.kcDataFileName = kcDataFileName;
     }
 
     private void setMember(Member member) {
@@ -51,8 +53,8 @@ public class Pdf {
         member.getPdfs().add(this);
     }
 
-    public void setPageKcId(String pageKcId) {
-        this.pageKcId = pageKcId;
+    public void setKcDataFilePath(String kcDataFilePath) {
+        this.kcDataFilePath = kcDataFilePath;
     }
 
     public void setSummary(Summary summary) {

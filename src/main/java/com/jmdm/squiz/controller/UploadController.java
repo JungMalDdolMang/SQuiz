@@ -35,7 +35,11 @@ public class UploadController {
                                                                           @RequestPart(name = "file" ) MultipartFile file,
                                                                           @RequestParam(name = "subjectType") SubjectType subjectType)
             throws IOException {
+        System.out.println("\n\n Post /api/v1/upload/upload-pdf 호출 \n\n");
+        System.out.println("userDetails = " + userDetails + ", file = " + file + ", subjectType = " + subjectType);
         PdfUploadResponse pdfUploadResponse = pdfUploadService.uploadPdf(userDetails.getUsername(), subjectType, file);
+        System.out.println("\n\n Post /api/v1/upload/upload-pdf 호출 \n\n");
+        System.out.println("pdfUploadResponse = " + pdfUploadResponse);
         return ResponseEntity.ok(ApiResponseEntity.ok(SuccessCode.SUCCESS, pdfUploadResponse, "업로드한 pdf 관련 정보입니다."));
     }
 

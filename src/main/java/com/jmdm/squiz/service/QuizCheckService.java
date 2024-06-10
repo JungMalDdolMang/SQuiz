@@ -59,7 +59,7 @@ public class QuizCheckService {
             problem.setCheckedAnswer(checkProblemDTO.getCheckedAnswer(), checkProblemDTO.getCheckedBlanks());
 
             boolean isCorrect = (quiz.getQuizType() == QuizType.BLANK)
-                    ? problem.getCheckedBlanks().equalsBlanks(problem.getBlanks())
+                    ? equalsCheckedBlanks(problem.getBlanks(),problem.getCheckedBlanks())
                     : problem.getCheckedAnswer().equals(problem.getAnswer());
             if (isCorrect) {
                 problem.setCorrect(1);
@@ -81,6 +81,20 @@ public class QuizCheckService {
 
 
         return gradeQuiz(quiz, problems);
+    }
+
+     public boolean equalsCheckedBlanks(Blanks blanks, CheckedBlanks checkedBlanks) {
+        if (blanks == null || checkedBlanks == null) {
+            return false;
+        }
+//         System.out.println("blank 1 result : "+ blanks.getBlank_1().equals(checkedBlanks.getChekedBlank_1()));
+//         System.out.println("blank 2 result : "+ blanks.getBlank_2().equals(checkedBlanks.getChekedBlank_2()));
+//         System.out.println("blank 3 result : "+ blanks.getBlank_3().equals(checkedBlanks.getChekedBlank_3()));
+//         System.out.println("blank 4 result : "+ blanks.getBlank_4().equals(checkedBlanks.getChekedBlank_4()));
+        return (blanks.getBlank_1() == null ? true : blanks.getBlank_1().equals(checkedBlanks.getChekedBlank_1())) &&
+               (blanks.getBlank_2() == null ? true : blanks.getBlank_2().equals(checkedBlanks.getChekedBlank_2())) &&
+               (blanks.getBlank_3() == null ? true : blanks.getBlank_3().equals(checkedBlanks.getChekedBlank_3())) &&
+               (blanks.getBlank_4() == null ? true : blanks.getBlank_4().equals(checkedBlanks.getChekedBlank_4()));
     }
 
     private void saveDkt(AiQuizCheckResponse response) {
@@ -168,6 +182,10 @@ public class QuizCheckService {
         response.setProblemNum(quiz.getProblemNum());
         response.setCorrectNum(quiz.getCorrectNum());
         response.setCorrectPerKcDTOS(correctPerKcDTOS);
+        response.setSubject(quiz.getSubject());
+        response.setTotalPageNum(pdf.getTotalPageCount());
+        response.setUploadFileName(pdf.getUploadFileName());
+        response.setGeneratedQuizNum(pdf.getQuizes().size());
         return response;
     }
 

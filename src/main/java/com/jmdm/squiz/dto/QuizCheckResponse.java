@@ -1,5 +1,6 @@
 package com.jmdm.squiz.dto;
 
+import com.jmdm.squiz.enums.SubjectType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -33,6 +34,18 @@ public class QuizCheckResponse {
     @Schema(description = "맞은 개수",
     defaultValue = "10")
     private int correctNum;
+
+    @Schema(description = "과목", defaultValue = "OPERATING_SYSTEM")
+    private SubjectType subject;
+
+    @Schema(description = "페이지 수", defaultValue = "20")
+    private int totalPageNum;
+
+    @Schema(description = "업로드한 파일이름", defaultValue = "운영체제 5장.pdf")
+    private String uploadFileName;
+
+    @Schema(description = "해당 pdf로 요청한 퀴즈 수", defaultValue = "1")
+    private int generatedQuizNum;
 
     @Schema(description = "kc 마다의 총 개수와 맞은 개수")
     private List<CorrectPerKcDTO> correctPerKcDTOS;

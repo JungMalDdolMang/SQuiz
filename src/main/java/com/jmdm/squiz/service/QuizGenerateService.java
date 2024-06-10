@@ -3,6 +3,7 @@ package com.jmdm.squiz.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmdm.squiz.domain.*;
 import com.jmdm.squiz.dto.*;
+import com.jmdm.squiz.enums.QuizType;
 import com.jmdm.squiz.enums.SubjectType;
 import com.jmdm.squiz.exception.ErrorCode;
 import com.jmdm.squiz.exception.model.AiServerException;
@@ -76,12 +77,36 @@ public class QuizGenerateService {
             problemDTO.setQuestion(aiProblemDTO.getQuestion());
             problemDTO.setOptions(aiProblemDTO.getOptions());
             problemDTO.setContent(aiProblemDTO.getContent());
+            if (response.getQuizType().equals(QuizType.BLANK)) {
+                problemDTO.setBlankNum(4 - getBlankNum(aiProblemDTO));
+            }
             problemDTOS.add(problemDTO);
+
         }
         response.setProblemList(problemDTOS);
         return response;
     }
+    private int getBlankNum(AiProblemDTO aiProblemDTO) {
+    Blanks blanks = aiProblemDTO.getBlanks();
+    int count = 0;
 
+    if (blanks != null) {
+        if ("none".equals(blanks.getBlank_1())) {
+            count++;
+        }
+        if ("none".equals(blanks.getBlank_2())) {
+            count++;
+        }
+        if ("none".equals(blanks.getBlank_3())) {
+            count++;
+        }
+        if ("none".equals(blanks.getBlank_4())) {
+            count++;
+        }
+    }
+
+    return count;
+}
 
     private Quiz saveQuizAndGetQuiz(Pdf pdf, Member member, QuizGenerateRequest request) {
 //        System.out.println(pdf);
@@ -138,8 +163,7 @@ public class QuizGenerateService {
         body.put("problemNum", request.getProblemNum());
         body.put("rank", request.getRank());
         body.put("pdfText", fileService.loadDataFromUrl(pdf.getFilePath()));
-        body.put("pageKcId", pdf.getPageKcId());
-        System.out.println(pdf.getPageKcId().getClass());
+        body.put("pageKcId", fileService.loadDataFromUrl(pdf.getKcDataFilePath()));
         body.put("dkt", dkts); // 추후 문제 재생성시로 바꾸기
         System.out.println("body = " + body);
 
