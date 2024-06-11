@@ -451,7 +451,7 @@ class ComponentController:
 
         user_content = ("Give me the Knowledge Component IDs for all pages. "
                         + "The material will have contents like '<1>', '<2>' followed by the content of that page. "
-                        + "KCs and KC IDs will be provided in the format '1 Operating System Definition 2 Operating System History', where KC ID and Learning Concept. "
+                        + "KCs and KC IDs will be provided in the format 'Operating System Definition 1   Operating System History 2.   System calls 3', where KC ID and Learning Concept. "
                         + " [study material] " + pdftxt
                         + " [Knowledge Component] " + kc_list)
 
