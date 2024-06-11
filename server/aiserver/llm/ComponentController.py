@@ -19,7 +19,7 @@ class ComponentController:
         else:
             rank = "MIDDLE"
 
-        
+        print(f"과목: {subject}")
         print(f"문제 난이도: {rank}")
         example_choice = ""
 
@@ -74,7 +74,7 @@ class ComponentController:
 
         dkt = params['dkt']
 
-        if len(dkt) >= 2:
+        if dkt and len(dkt) >= 2:
             sorted_dkt = sorted(dkt, key=lambda x: x["predict"])
             kc_list = [sorted_dkt[0]["kcId"], sorted_dkt[1]["kcId"]]            
 
@@ -119,6 +119,7 @@ class ComponentController:
         else:
             rank = "MIDDLE"
 
+        print(f"과목: {subject}")
         print(f"문제 난이도: {rank}")
 
         example_ox = ""
@@ -173,7 +174,7 @@ class ComponentController:
 
         dkt = params['dkt']
 
-        if len(dkt) >= 2:
+        if dkt and len(dkt) >= 2:
             sorted_dkt = sorted(dkt, key=lambda x: x["predict"])
             kc_list = [sorted_dkt[0]["kcId"], sorted_dkt[1]["kcId"]]            
             
@@ -217,7 +218,7 @@ class ComponentController:
             rank = "ADVANCED."
         else:
             rank = "MIDDLE"
-
+        print(f"과목: {subject}")
         print(f"문제 난이도: {rank}")
 
         example_blank = ""
@@ -252,7 +253,8 @@ class ComponentController:
                             "[Example4] KC: 배치 관리자 Question:패널 p에 4 X 3 격자 모양으로 위젯들을 배치하려 한다. 배치관리자를 설정하는 아래의 코드의 빈칸에 들어갈 코드를 작성하시오. Content: p.setLayout( ___(1)___ ); Blank1:new GridLayout(4, 3) "\
                             "[Example5] KC:기본 도형 그리기 Question:(0,0)을 왼쪽 상단으로 하고 크기가 100 X 100인 사각형을 그리고자 한다. 빈칸에 들어갈 코드를 작성하시오. Content:class MyPanel extends JPanel{ public void paintComponent(Graphics g){ super.paintComponent(g); ___(1)___ ; } } Blank1:g.drawRect(0, 0, 100, 100);"
 
-        sys_content_for_blank = (
+        if subject != "C_LANGUAGE":
+            sys_content_for_blank = (
                 "You will receive the knowledge component (KC) and the contents of the corresponding learning materials."
                 "KC is a unit of learning concept. For example, in operating system subjects, process concepts, system calls, etc. can be KC. "
                 "Create fill-in-the-blank questions for studying operating systems. "
@@ -277,9 +279,69 @@ class ComponentController:
                 "Please make the problem difficulty level " + rank +
                 "Keep in mind that you must create problems according to the given number of problems.")
    
-        dkt = params['dkt']
+        else:
+            sys_content_for_blank = (
+            # '너는 각 knowledge component(KC) 별로 구분된 수엽용 학습자료를 받을거야. 그리고 각 KC와 학습자료를 기반으로 빈칸 문제를 만들어야해.'
+            # "주어진 개수만큼 주어진 난이도에 맞춰 문제를 생성해"
+            # "KC는 학습에 단위가 되는 거야. 각 KC는 그들을 식별하는 KC ID를 가지고 있어."
+            # "학습자료는 다음과 같은 형태로 입력될 거야. <KC ID> KC: 학습 내용. KC ID와 KC는 임의로 정해진 쌍이기 때문에 항상 둘이 대응되어야 해."
+            # "너는 주어진 입력 중에 KC를 택하고 해당 학습 자료에 기반하여 해당 개념을 확인할 수 있는 빈칸 문제를 만들어."
+            # "빈칸 문제는 답이 명확해야해. 단답식으로 답을 낼 수 있도록 짧고 명확하게 만들어야 해."
+            # "한 문제당 빈칸의 개수는 최소 1개에서 최대 4개까지 있을 수 있어."
+            # "빈칸은 1번부터 시작해야해 하고, ___ (1) ___, ___ (2) ___ 이런식으로 빈칸을 표시하도록 해."
+            # "빈칸이 포함되는 content와 해당 content에 대한 설명과 content에 대한 짧은 설명과 '빈칸을 채우시오'와 같은 지시문을 포함하는 Question을 만들어"
+            # "코드 빈칸 채우기 같은 코드 관련 문제도 낼 수 있어. 코드 관련 문제의 경우에는 content는 보기좋게 렌더링하기 위해 마크다운 포맷의 문자열로 출력해야해."
+            # "코드의 경우 코드 블럭으로 만들기 위해 ```c 와 같이 코드블럭을 나타내는 문자열이 포함되어야 해."
+            # "문제를 생성해서 get_pronlem 함수를 호출해"
+            # "그리고 가장 중요한 건 문제는 주어진 개수 만큼 만들어야 한다는 것을 명심해."
+            # "KC는 임의로 생성하지 말고, 주어진 자료에 기반해서 선택해."
+            # "문제는 짧게 간결하고 명확하게 만들도록 해."
+            # "또한 문제 난이도는 ADVANCED 레벨로 만들어야 해."
+            "You will receive learning materials segmented by each knowledge component (KC). Based on each KC and the learning materials, you need to create fill-in-the-blank questions."
 
-        if len(dkt) >= 2:
+            f"Generate the {problem_num}questions matching the given difficulty level {rank}."
+
+            "KC is a unit used for learning. Each KC has a KC ID that identifies them."
+
+            "The learning materials will be provided in the following format: <KC ID> KC: learning content. Since KC IDs and KCs are arbitrarily paired, they must always correspond to each other."
+
+            "Choose a KC from the given inputs and create fill-in-the-blank questions based on the corresponding learning material to verify that concept."
+
+            "The fill-in-the-blank questions must have clear answers. Make them short and precise so that they can be answered in a single word or phrase."
+
+            "There should be at least 1 and at most 4 blanks per question."
+
+            "Blanks should start from number 1, and be indicated as ___ (1) ___, ___ (2) ___ in the content."
+
+            "Create a question that includes the content with blanks, a short explanation of the content, and an instruction like 'Fill in the blanks'."
+
+            "You can also create code-related questions like code fill-in-the-blank. In the case of code-related questions, the content should be output as a string in markdown format for better rendering."
+
+            "For code, the string should include code blocks indicated by ```c to represent code blocks."
+
+            "Generate the questions and call the get_pronlem function."
+
+            f"Most importantly, remember that you must create the {problem_num} questions."
+
+            "Do not arbitrarily generate KCs; select them based on the given materials."
+
+            "Make the questions short, concise, and clear."
+            
+            "Ensure that the answers for the blanks are composed of a single word, not a sentence or a verb."
+            
+            "You should create blanks in places that can be inferred solely from the content."
+
+            f"Also, make the difficulty level of the questions {rank}"
+            
+            "There may be noise in the learning materials, so create questions based on the learning materials, but ensure they are based solely on facts."
+
+            "Do not create questions that can have multiple correct answers or questions that are too similar to each other."
+
+            )
+
+        dkt = params['dkt']
+        print("Hi")
+        if dkt and len(dkt) >= 2:
             sorted_dkt = sorted(dkt, key=lambda x: x["predict"])
             kc_list = [sorted_dkt[0]["kcId"], sorted_dkt[1]["kcId"]]            
             
@@ -540,7 +602,7 @@ class ComponentController:
                             },
                             "content": {
                                 "type": "string",
-                                "description": "Content with blanks. The number of blanks should be between 1 and 4. Blanks should be indicated with IDs in the format of ___(1)___, ___(2)___. Place three underscores before and after the blanks. IDs are assigned in order starting from 0, 1, 2, and so forth. The content can be an explanation of a concept or it can be programming code. Blanks should be created to verify understanding of important concepts. For example, to open a file, one would use the system call like ___(1)___."
+                                "description": "Content with blanks. The number of blanks should be between 1 and 4. Blanks should be indicated with IDs in the format of ___ (1) ___, ___ (2) ___. Place three underscores before and after the blanks. IDs are assigned in order starting from 0, 1, 2, and so forth. The content can be an explanation of a concept or it can be programming code. Blanks should be created to verify understanding of important concepts."
                             },
                             "is_markdown": {
                                 "type": "boolean",

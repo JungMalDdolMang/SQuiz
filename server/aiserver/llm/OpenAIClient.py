@@ -25,6 +25,7 @@ class OpenAIClient:
                 model="gpt-4o",
                 messages=message,
                 tools=schema,
+                top_p=0.95
             )
 
             tool_calls = response.choices[0].message.tool_calls

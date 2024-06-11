@@ -41,7 +41,8 @@ class QuizGenerator:
         for kc_id in kc_id_list:
             input_txt += f"<{kc_id}> {self.kc_df.loc[kc_id]['kc']}: "
             input_txt += j[kc_id] + "\n"
-            
+        print("input_txt", input_txt)
+
         return input_txt
 
     def get_quiz(self, params):
