@@ -8,8 +8,16 @@ services:
     ports:
       - "6379:6379"
   backend:
-    image: squizuos/squiz-backend:v1.0.6
+    container_name: backend
+    hostname: backend
+    image: squizuos/squiz-backend:v1.2.8
     ports:
       - "8080:8080"
     depends_on:
       - redis
+  client:
+    container_name: client
+    hostname: client
+    image: squizuos/client:v1.0.0
+    ports:
+      - "3000:3000"

@@ -28,7 +28,7 @@ public class Quiz {
     private Member member;
 
     private String quizName;
-    private SubjectType subject;
+    private SubjectType subjectType;
     private int startPage;
     private int endPage;
     private QuizType quizType;
@@ -43,12 +43,12 @@ public class Quiz {
     private List<Problem> problems = new ArrayList<>();
     //Pdf pdf, Member member,
     @Builder
-    public Quiz(Long id, String quizName, Pdf pdf, Member member, SubjectType subject, int startPage, int endPage, QuizType quizType, int problemNum, Rank rank) {
+    public Quiz(Long id, String quizName, Pdf pdf, Member member, SubjectType subjectType, int startPage, int endPage, QuizType quizType, int problemNum, Rank rank) {
         this.id = id;
         setPdf(pdf);
         setMember(member);
         this.quizName = quizName;
-        this.subject = subject;
+        this.subjectType = subjectType;
         this.startPage = startPage;
         this.endPage = endPage;
         this.quizType = quizType;

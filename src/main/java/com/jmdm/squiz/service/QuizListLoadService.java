@@ -30,7 +30,7 @@ public class QuizListLoadService {
             QuizDTO dto = QuizDTO.builder()
                     .quizId(quiz.getId())
                     .quizName(quiz.getQuizName())
-                    .subjectType(quiz.getSubject())
+                    .subjectType(quiz.getSubjectType())
                     .problemNum(quiz.getProblemNum())
                     .correctNum(quiz.getCorrectNum())
                     .createdAt(quiz.getCreatedAt())
@@ -51,7 +51,7 @@ public class QuizListLoadService {
         for (Problem problem : problems) {
             kcIdList.add(problem.getKcId());
         }
-        DktPerSubject dktPerSubject = dktPerSubjectRepository.findByMemberAndSubjectType(member, quiz.getSubject());
+        DktPerSubject dktPerSubject = dktPerSubjectRepository.findByMemberAndSubjectType(member, quiz.getSubjectType());
         List<DktList> dktLists = dktPerSubject.getDktLists();
 
         kcIdList.forEach(targetKcId -> {

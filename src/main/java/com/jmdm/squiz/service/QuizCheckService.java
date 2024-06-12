@@ -76,7 +76,7 @@ public class QuizCheckService {
             dto.setCorrect(problem.getCorrect());
             kcDTOS.add(dto);
         }
-        AiQuizCheckResponse AiResponse = postAiAndGetDkt(memberId, quiz.getSubject(), kcDTOS);
+        AiQuizCheckResponse AiResponse = postAiAndGetDkt(memberId, quiz.getSubjectType(), kcDTOS);
         saveDkt(AiResponse);
 
 
@@ -182,7 +182,7 @@ public class QuizCheckService {
         response.setProblemNum(quiz.getProblemNum());
         response.setCorrectNum(quiz.getCorrectNum());
         response.setCorrectPerKcDTOS(correctPerKcDTOS);
-        response.setSubject(quiz.getSubject());
+        response.setSubjectType(quiz.getSubjectType());
         response.setTotalPageNum(pdf.getTotalPageCount());
         response.setUploadFileName(pdf.getUploadFileName());
         response.setGeneratedQuizNum(pdf.getQuizes().size());

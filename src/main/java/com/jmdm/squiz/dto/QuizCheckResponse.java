@@ -36,7 +36,7 @@ public class QuizCheckResponse {
     private int correctNum;
 
     @Schema(description = "과목", defaultValue = "OPERATING_SYSTEM")
-    private SubjectType subject;
+    private SubjectType subjectType;
 
     @Schema(description = "페이지 수", defaultValue = "20")
     private int totalPageNum;

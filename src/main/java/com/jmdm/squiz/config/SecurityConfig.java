@@ -4,6 +4,7 @@ import com.jmdm.squiz.jwt.JWTFilter;
 import com.jmdm.squiz.jwt.JWTUtil;
 import com.jmdm.squiz.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,12 +20,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.ForwardedHeaderFilter;
+
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Value("${front.server.url}")
+    private String aiServer;
 
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -55,7 +61,7 @@ public class SecurityConfig {
 
                     CorsConfiguration configuration = new CorsConfiguration();
 
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                    configuration.setAllowedOrigins(Arrays.asList(aiServer, "http://localhost:3000"));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));

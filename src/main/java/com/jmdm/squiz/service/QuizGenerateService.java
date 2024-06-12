@@ -8,6 +8,7 @@ import com.jmdm.squiz.enums.SubjectType;
 import com.jmdm.squiz.exception.ErrorCode;
 import com.jmdm.squiz.exception.model.AiServerException;
 import com.jmdm.squiz.exception.model.NotFoundPdfException;
+import com.jmdm.squiz.exception.model.WrongProblemNumException;
 import com.jmdm.squiz.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +57,7 @@ public class QuizGenerateService {
         Quiz quiz = saveQuizAndGetQuiz(pdf, member, request);
 
         //post
-        ArrayList<Dkt> dkts = isPlusQuiz(member, quiz.getSubject());
+        ArrayList<Dkt> dkts = isPlusQuiz(member, quiz.getSubjectType());
         AiQuizGenerateResponse AiResponse = postAiAndGetQuiz(quiz.getId(), pdf, request, dkts); // ai post api 호출
 //        AiQuizGenerateResponse AiResponse = aiTest(quiz.getId(), request);
         System.out.println("AiResponse = " + AiResponse);
@@ -71,6 +72,9 @@ public class QuizGenerateService {
         response.setQuizName(request.getQuizName());
         response.setProblemNum(request.getProblemNum());
         ArrayList<ProblemDTO> problemDTOS = new ArrayList<>();
+        if (aiResponse.getProblemList().size() != response.getProblemNum()){
+            throw new WrongProblemNumException(ErrorCode.PROBLEM_GENERATE_FAIL, ErrorCode.PROBLEM_GENERATE_FAIL.getMessage());
+        }
         for (AiProblemDTO aiProblemDTO : aiResponse.getProblemList()) {
             ProblemDTO problemDTO = new ProblemDTO();
             problemDTO.setProblemNo(aiProblemDTO.getProblemNo());
@@ -116,7 +120,7 @@ public class QuizGenerateService {
                 .pdf(pdf)
                 .member(member)
                 .quizName(request.getQuizName())
-                .subject(request.getSubject())
+                .subjectType(request.getSubjectType())
                 .startPage(request.getStartPage())
                 .endPage(request.getEndPage())
                 .quizType(request.getQuizType())

@@ -22,7 +22,7 @@ public class FruitBasket {
     private Long id;
 
     private String fruitBasketName;
-    private SubjectType subject;
+    private SubjectType subjectType;
     private int problemNum;
 
     @ManyToOne
@@ -41,10 +41,10 @@ public class FruitBasket {
     private LocalDateTime updatedAt;
 
     @Builder
-    public FruitBasket(Long id, String fruitBasketName, SubjectType subject, int problemNum, Member member, List<FruitBasketProblem> fruitBasketProblems, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public FruitBasket(Long id, String fruitBasketName, SubjectType subjectType, int problemNum, Member member, List<FruitBasketProblem> fruitBasketProblems, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.fruitBasketName = fruitBasketName;
-        this.subject = subject;
+        this.subjectType = subjectType;
         this.problemNum = problemNum;
         setMember(member);
         this.fruitBasketProblems = fruitBasketProblems;

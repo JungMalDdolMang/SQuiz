@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 @Schema(description = "문제 객체")
 public class ProblemAnswerDTO {
-    @Schema(description = "문제 번호",
+    @Schema(description = "문제 id",
             defaultValue = "1")
-    private int problemNo;
+    private Long problemNo;
     @Schema(description = "문제 유형", defaultValue = "MULTIPLE_CHOICE")
     private QuizType quizType;
     @Schema(description = "문제",
@@ -37,7 +37,7 @@ public class ProblemAnswerDTO {
     private String kcName;
 
     @Builder
-    public ProblemAnswerDTO(int problemNo, String question, Options options, String content, String answer, String checkedAnswer, Blanks blanks, CheckedBlanks checkedBlanks, int isCorrect, QuizType quizType, String explanation, String kcName) {
+    public ProblemAnswerDTO(Long problemNo, String question, Options options, String content, String answer, String checkedAnswer, Blanks blanks, CheckedBlanks checkedBlanks, int isCorrect, QuizType quizType, String explanation, String kcName) {
         this.problemNo = problemNo;
         this.question = question;
         this.options = options;

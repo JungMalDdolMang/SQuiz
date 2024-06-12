@@ -24,7 +24,7 @@ public class QuizGenerateRequest {
     @NotBlank(message = "과목 선택은 필수입니다.")
     @Schema(description = "과목 유형",
             defaultValue = "OPERATING_SYSTEM")
-    private SubjectType subject;
+    private SubjectType subjectType;
 
     @NotBlank(message = "시작 페이지는 필수입니다.")
     @Schema(description = "시작 페이지 1 이상", defaultValue = "1")

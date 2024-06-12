@@ -1,14 +1,15 @@
 package com.jmdm.squiz.service;
 
+
 import com.jmdm.squiz.domain.FruitBasket;
 import com.jmdm.squiz.domain.FruitBasketProblem;
 import com.jmdm.squiz.domain.Member;
 import com.jmdm.squiz.domain.Problem;
 import com.jmdm.squiz.dto.*;
+import com.jmdm.squiz.enums.KC;
 import com.jmdm.squiz.exception.ErrorCode;
 import com.jmdm.squiz.exception.model.NotFoundFruitBasketException;
 import com.jmdm.squiz.exception.model.NotFoundProblemException;
-import com.jmdm.squiz.exception.model.NotFoundQuizException;
 import com.jmdm.squiz.repository.FruitBasketProblemRepository;
 import com.jmdm.squiz.repository.FruitBasketRepository;
 import com.jmdm.squiz.repository.MemberRepository;
@@ -37,7 +38,7 @@ public class FruitBasketService {
             FruitBasketDTO fruitBasketDTO = FruitBasketDTO.builder()
                     .fruitBasketId(fruitBasket.getId())
                     .fruitBasketName(fruitBasket.getFruitBasketName())
-                    .subject(fruitBasket.getSubject())
+                    .subjectType(fruitBasket.getSubjectType())
                     .problemNum(fruitBasket.getProblemNum())
                     .createdAt(fruitBasket.getCreatedAt())
                     .updatedAt(fruitBasket.getUpdatedAt())
@@ -53,7 +54,7 @@ public class FruitBasketService {
         Member member = memberRepository.findByMemberId(memberId);
         FruitBasket fruitBasket = FruitBasket.builder()
                 .fruitBasketName(request.getFruitBasketName())
-                .subject(request.getSubject())
+                .subjectType(request.getSubjectType())
                 .problemNum(0)
                 .member(member)
                 .build();
@@ -61,7 +62,7 @@ public class FruitBasketService {
         FruitBasketDTO newFruitBasket = FruitBasketDTO.builder()
                 .fruitBasketId(fruitBasket.getId())
                 .fruitBasketName(fruitBasket.getFruitBasketName())
-                .subject(fruitBasket.getSubject())
+                .subjectType(fruitBasket.getSubjectType())
                 .problemNum(fruitBasket.getProblemNum())
                 .createdAt(fruitBasket.getCreatedAt())
                 .updatedAt(fruitBasket.getUpdatedAt())
@@ -76,11 +77,11 @@ public class FruitBasketService {
         List<FruitBasket> fruitBaskets = member.getFruitBaskets();
         ArrayList<FruitBasketDTO> fruitBasketDTOS = new ArrayList<>();
         for (FruitBasket fruitBasket : fruitBaskets) {
-            if (fruitBasket.getSubject().equals(request.getSubject())) {
+            if (fruitBasket.getSubjectType().equals(request.getSubjectType())) {
                 FruitBasketDTO dto = FruitBasketDTO.builder()
                         .fruitBasketId(fruitBasket.getId())
                         .fruitBasketName(fruitBasket.getFruitBasketName())
-                        .subject(fruitBasket.getSubject())
+                        .subjectType(fruitBasket.getSubjectType())
                         .problemNum(fruitBasket.getProblemNum())
                         .createdAt(fruitBasket.getCreatedAt())
                         .updatedAt(fruitBasket.getUpdatedAt())
@@ -115,7 +116,7 @@ public class FruitBasketService {
         int i = 1;
         for (FruitBasketProblem fruitBasketProblem : fruitBasketProblems) {
             ProblemAnswerDTO dto = ProblemAnswerDTO.builder()
-                    .problemNo(i)
+                    .problemNo(fruitBasketProblem.getProblem().getId())
                     .quizType(fruitBasketProblem.getQuizType())
                     .question(fruitBasketProblem.getProblem().getQuestion())
                     .options(fruitBasketProblem.getProblem().getOptions())
@@ -126,6 +127,7 @@ public class FruitBasketService {
                     .checkedBlanks(fruitBasketProblem.getProblem().getCheckedBlanks())
                     .isCorrect(fruitBasketProblem.getProblem().getCorrect())
                     .explanation(fruitBasketProblem.getProblem().getExplanation())
+                    .kcName(KC.fromId(fruitBasketProblem.getProblem().getKcId()))
                     .build();
             problemList.add(dto);
             i++;

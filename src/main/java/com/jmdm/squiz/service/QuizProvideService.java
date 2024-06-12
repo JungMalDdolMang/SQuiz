@@ -32,7 +32,7 @@ public class QuizProvideService {
         ArrayList<ProblemAnswerDTO> problemAnswerDTOS = new ArrayList<>();
         for (Problem problem : problems) {
             ProblemAnswerDTO problemAnswerDTO = ProblemAnswerDTO.builder()
-                    .problemNo(problem.getProblemNo())
+                    .problemNo(problem.getId())
                     .quizType(quiz.getQuizType())
                     .question(problem.getQuestion())
                     .options(problem.getOptions())
@@ -53,7 +53,7 @@ public class QuizProvideService {
                 .quizName(quiz.getQuizName())
                 .problemNum(quiz.getProblemNum())
                 .problemList(problemAnswerDTOS)
-                .subjectType(quiz.getSubject())
+                .subjectType(quiz.getSubjectType())
                 .build();
     }
 

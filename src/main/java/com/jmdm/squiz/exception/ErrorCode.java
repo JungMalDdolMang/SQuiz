@@ -14,7 +14,8 @@ public enum ErrorCode {
     PDF_NOT_FOUND(HttpStatus.NOT_FOUND, "pdf가 존재하지 않습니다."),
     QUIZ_NOT_FOUND(HttpStatus.NOT_FOUND, "quiz가 존재하지 않습니다."),
     FRUIT_BASKET_NOT_FOUND(HttpStatus.NOT_FOUND, "fruit basket이 존재하지 않습니다."),
-    PROBLEM_NOT_FOUND(HttpStatus.NOT_FOUND, "problem이 존재하지 않습니다.")
+    PROBLEM_NOT_FOUND(HttpStatus.NOT_FOUND, "problem이 존재하지 않습니다."),
+    PROBLEM_GENERATE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "문제 생성을 실패했습니다.")
     ;
 
     private final HttpStatus code;

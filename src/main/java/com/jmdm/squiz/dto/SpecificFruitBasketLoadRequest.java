@@ -8,5 +8,5 @@ import lombok.Data;
 @Schema(description = "특정 과목 과일바구니 목록 로드 request")
 public class SpecificFruitBasketLoadRequest {
     @Schema(description = "과목명", defaultValue = "OPERATING_SYSTEM")
-    private SubjectType subject;
+    private SubjectType subjectType;
 }

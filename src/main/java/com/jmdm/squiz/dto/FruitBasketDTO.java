@@ -16,7 +16,7 @@ public class FruitBasketDTO {
     @Schema(description = "과일바구니 이름", defaultValue = "과일바구니 이름")
     private String fruitBasketName;
     @Schema(description = "과목", defaultValue = "OPERATING_SYSTEM")
-    private SubjectType subject;
+    private SubjectType subjectType;
     @Schema(description = "문제 수", defaultValue = "15")
     private int problemNum;
 
@@ -28,10 +28,10 @@ public class FruitBasketDTO {
     private LocalDateTime updatedAt;
 
     @Builder
-    public FruitBasketDTO(Long fruitBasketId, String fruitBasketName, SubjectType subject, int problemNum, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public FruitBasketDTO(Long fruitBasketId, String fruitBasketName, SubjectType subjectType, int problemNum, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.fruitBasketId = fruitBasketId;
         this.fruitBasketName = fruitBasketName;
-        this.subject = subject;
+        this.subjectType = subjectType;
         this.problemNum = problemNum;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
